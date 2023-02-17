@@ -16,7 +16,6 @@ import dash
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
-import geopandas as gpd
 from dash import Input, Output, dcc, html
 from pages.compare import compare
 roboto_flex = "https://fonts.cdnfonts.com/css/roboto-flex"
