@@ -14,11 +14,13 @@
 '''
 import dash
 import dash_bootstrap_components as dbc
+import plotly.express as px
+import pandas as pd
 from dash import Input, Output, dcc, html
-
-app = dash.Dash(
+roboto_flex = "https://fonts.cdnfonts.com/css/roboto-flex"
+app = dash.Dash(__name__,
     title="youthbit_dashboard",
-    external_stylesheets=[dbc.themes.BOOTSTRAP],
+    external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,roboto_flex ],
     )
 
 # Declare server for Heroku deployment. Needed for Procfile.
@@ -32,29 +34,37 @@ SIDEBAR_STYLE = {
     "bottom": 0,
     "width": "16rem",
     "padding": "2rem 1rem",
-    "background-color": "#f8f9fa",
+    "backgroundColor": "#897AD6",
+    "color": "#FFFFFF",
+    "boxShadow": "0px 0px 10px 0px black",
 }
 
 # the styles for the main content position it to the right of the sidebar and
 # add some padding.
 CONTENT_STYLE = {
-    "margin-left": "18rem",
-    "margin-right": "2rem",
+    "marginLeft": "18rem",
+    "marginRight": "2rem",
     "padding": "2rem 1rem",
 }
 
 sidebar = html.Div(
     [
-        html.H2("Sidebar", className="display-4"),
-        html.Hr(),
-        html.P(
-            "A simple sidebar layout with navigation links", className="lead"
-        ),
+        html.Img(className="pb-2 mb-4",src=dash.get_asset_url('logo.png'), style={"borderBottom": "2px solid #B3E427"}, alt="YouthBit Logo", width=220, height=63),
         dbc.Nav(
             [
-                dbc.NavLink("Home", href="/", active="exact"),
-                dbc.NavLink("Page 1", href="/page-1", active="exact"),
-                dbc.NavLink("Page 2", href="/page-2", active="exact"),
+                dbc.NavLink([
+                    html.I(className="bi bi-house-door-fill me-2"),
+                    "Dashboard",
+                ], href="/", active="exact"),
+                dbc.NavLink([
+                    html.I(className="bi bi-house-door-fill me-2"),
+                    "Page 1",
+                ], href="/page-1", active="exact"),
+                dbc.NavLink([
+                    html.I(className="bi bi-house-door-fill me-2"),
+                    "Page 2",
+                ], href="/page-2", active="exact"),
+                
             ],
             vertical=True,
             pills=True,
