@@ -1,0 +1,56 @@
+/* overwrite bootstrap default styles */
+.nav a:hover {
+  background-color: rgba(9, 35, 79, 0.25) !important;
+  color: #B3E427 !important;
+}
+.nav a.active {
+  background-color: #B3E427 !important;
+  color: black !important;
+  box-shadow: inset 2px 2px 4px hsl(76, 35%, 52%);
+}
+
+.nav a {
+  color: white !important;
+  font-family: "Roboto Flex", sans-serif !important;
+  transition: all 0.2s ease-out !important;
+  padding: 0 8px !important;
+  border-radius: 8px !important;
+}
+
+.nav {
+  gap:10px !important;
+}
+
+.nav i {
+  font-size: 30px !important;
+}
+
+.menu-button {
+  display: none;
+  background-color: #B3E427;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.2s ease-out ;
+}
+
+.menu-button:hover {
+  background-color: hsl(76, 55%, 52%);
+}
+
+@media screen and (max-width: 768px)  {
+  .sidebar {
+    left: -100vw !important;
+  }
+  .sidebar.active {
+    left: 0 !important;
+  }
+  .page-content {
+    margin-left: 0 !important;
+  }
+  .menu-button {
+    display: block;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+  }
+}

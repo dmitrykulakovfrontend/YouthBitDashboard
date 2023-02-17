@@ -37,6 +37,8 @@ SIDEBAR_STYLE = {
     "backgroundColor": "#897AD6",
     "color": "#FFFFFF",
     "boxShadow": "0px 0px 10px 0px black",
+    "transition": "all 0.4s ease-in",
+    "z-index": "2"
 }
 
 # the styles for the main content position it to the right of the sidebar and
@@ -71,17 +73,34 @@ sidebar = html.Div(
         ),
     ],
     style=SIDEBAR_STYLE,
+    className="sidebar"
 )
 
-content = html.Div(id="page-content", style=CONTENT_STYLE)
+df = pd.read_csv('https://gist.githubusercontent.com/chriddyp/5d1ea79569ed194d432e56108a04d188/raw/a9f9e8076b837d541398e999dcbac2b2826a81f8/gdp-life-exp-2007.csv')
 
-app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
+fig = px.scatter(df, x="gdp per capita", y="life expectancy",
+                 size="population", color="continent", hover_name="country",
+                 log_x=True, size_max=60)
+
+
+content = html.Div(id="page-content", style=CONTENT_STYLE, className="page-content")
+
+small_screens_button = html.Button(html.I(className="bi bi-list"), className="menu-button", n_clicks=0)
+@app.callback(Output(sidebar, "className"), Input(small_screens_button, "n_clicks"))
+def toggle_menu(clicks_amount):
+    if clicks_amount % 2 != 0: return 'sidebar active'
+    return 'sidebar'
+
+app.layout = html.Div([dcc.Location(id="url"), sidebar, content, small_screens_button])
 
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname == "/":
-        return html.P("This is the content of the home page!")
+        return [html.P("This is the content of the home page!"),dcc.Graph(
+        id='life-exp-vs-gdp',
+        figure=fig
+    )]
     elif pathname == "/page-1":
         return html.P("This is the content of page 1. Yay!")
     elif pathname == "/page-2":
