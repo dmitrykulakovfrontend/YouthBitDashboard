@@ -16,13 +16,16 @@ import dash
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
+import geopandas as gpd
 from dash import Input, Output, dcc, html
+from pages.compare import compare
 roboto_flex = "https://fonts.cdnfonts.com/css/roboto-flex"
-app = dash.Dash(__name__,
-    title="youthbit_dashboard",
-    external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,roboto_flex ],
-    )
-
+app = dash.Dash(__name__, suppress_callback_exceptions=True,
+                title="youthbit_dashboard",
+                external_stylesheets=[dbc.themes.BOOTSTRAP,
+                                      dbc.icons.BOOTSTRAP, roboto_flex],
+                )
+# app.config.supress_callback_exceptions=True
 # Declare server for Heroku deployment. Needed for Procfile.
 server = app.server
 
@@ -51,7 +54,8 @@ CONTENT_STYLE = {
 
 sidebar = html.Div(
     [
-        html.Img(className="pb-2 mb-4",src=dash.get_asset_url('logo.png'), style={"borderBottom": "2px solid #B3E427"}, alt="YouthBit Logo", width=220, height=63),
+        html.Img(className="pb-2 mb-4", src=dash.get_asset_url('logo.png'), style={
+                 "borderBottom": "2px solid #B3E427"}, alt="YouthBit Logo", width=220, height=63),
         dbc.Nav(
             [
                 dbc.NavLink([
@@ -60,13 +64,13 @@ sidebar = html.Div(
                 ], href="/", active="exact"),
                 dbc.NavLink([
                     html.I(className="bi bi-house-door-fill me-2"),
-                    "Page 1",
-                ], href="/page-1", active="exact"),
+                    "Сравнение",
+                ], href="/compare", active="exact"),
                 dbc.NavLink([
                     html.I(className="bi bi-house-door-fill me-2"),
                     "Page 2",
                 ], href="/page-2", active="exact"),
-                
+
             ],
             vertical=True,
             pills=True,
@@ -75,34 +79,36 @@ sidebar = html.Div(
     style=SIDEBAR_STYLE,
     className="sidebar"
 )
-
-df = pd.read_csv('https://gist.githubusercontent.com/chriddyp/5d1ea79569ed194d432e56108a04d188/raw/a9f9e8076b837d541398e999dcbac2b2826a81f8/gdp-life-exp-2007.csv')
-
-fig = px.scatter(df, x="gdp per capita", y="life expectancy",
-                 size="population", color="continent", hover_name="country",
-                 log_x=True, size_max=60)
+# russia_geoJSON = 'https://raw.githubusercontent.com/timurkanaz/Russia_geojson_OSM/master/GeoJson\'s/Countries/Russia_regions.geojson'
 
 
-content = html.Div(id="page-content", style=CONTENT_STYLE, className="page-content")
+content = html.Div(id="page-content", style=CONTENT_STYLE,
+                   className="page-content")
 
-small_screens_button = html.Button(html.I(className="bi bi-list"), className="menu-button", n_clicks=0)
+small_screens_button = html.Button(
+    html.I(className="bi bi-list"), className="menu-button", n_clicks=0)
+
+
 @app.callback(Output(sidebar, "className"), Input(small_screens_button, "n_clicks"))
 def toggle_menu(clicks_amount):
-    if clicks_amount % 2 != 0: return 'sidebar active'
+    if clicks_amount % 2 != 0:
+        return 'sidebar active'
     return 'sidebar'
 
-app.layout = html.Div([dcc.Location(id="url"), sidebar, content, small_screens_button])
+
+app.layout = html.Div([dcc.Location(id="url"), sidebar,
+                      content, small_screens_button])
 
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname == "/":
-        return [html.P("This is the content of the home page!"),dcc.Graph(
-        id='life-exp-vs-gdp',
-        figure=fig
-    )]
-    elif pathname == "/page-1":
-        return html.P("This is the content of page 1. Yay!")
+        return [html.P("This is the content of the home page!"), dcc.Graph(
+            id='life-exp-vs-gdp',
+            figure=fig
+        )]
+    elif pathname == "/compare":
+        return compare,
     elif pathname == "/page-2":
         return html.P("Oh cool, this is page 2!")
     # If the user tries to reach a different page, return a 404 message
