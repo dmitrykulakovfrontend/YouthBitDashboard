@@ -59,11 +59,13 @@ sidebar = html.Div(
         dbc.Nav(
             [
                 dbc.NavLink([
-                    html.I(className="bi bi-house-door-fill me-2"),
+                    html.Img(className="m-2", src=dash.get_asset_url(
+                        'earth_icon.png'), width="40", height="40"),
                     "Регионы",
                 ], href="/", active="exact"),
                 dbc.NavLink([
-                    html.I(className="bi bi-house-door-fill me-2"),
+                    html.Img(className="m-2", src=dash.get_asset_url(
+                        'graphs_icon.png'), width="40", height="40"),
                     "Сравнение",
                 ], href="/compare", active="exact"),
 

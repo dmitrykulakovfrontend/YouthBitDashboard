@@ -4,9 +4,8 @@
   color: #b3e427 !important;
 }
 .nav a.active {
-  background-color: #b3e427 !important;
-  color: black !important;
-  box-shadow: inset 2px 2px 4px hsl(76, 35%, 52%);
+  background-color: rgba(9, 35, 79, 0.25) !important;
+  color: #b3e427 !important;
 }
 
 .nav a {
