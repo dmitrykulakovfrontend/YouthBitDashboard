@@ -11,7 +11,7 @@ df = pd.read_csv('https://raw.githubusercontent.com/dmitrykulakovfrontend/YouthB
 @callback(Output("charts", "style"),  Input("region", "value"), Input("type", "value"))
 def toggle_menu(val1, val2):
     if val1 == None or val2 == None: return {"display": "none"}
-    return {"display": "block", "position": "relative", "right": "50px"}
+    return {"display": "flex", "position": "relative", "right": "50px"}
 
 @callback(Output("cards", "children"),Output('histogram', "figure"),Output('histogram2', "figure"), Input("region", "value"), Input("type", "value"))
 def display_region_info(region_name, type):
