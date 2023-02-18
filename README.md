@@ -1,18 +1,66 @@
-# Youth Bit Dashboard
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
 
-Created on 2023-02-15 20:34:03.140186
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/dmitrykulakovfrontend/YouthBitDashboard">
+    <img src="logo.png" alt="Logo" border="1px">
+  </a>
 
-Welcome to your [Plotly Dash](https://plotly.com/dash/) App!
+  <h2 align="center"><strong>Молодёжный бит «Дашборд»</strong></h3>
 
-See [Faculty.ai](https://dash-bootstrap-components.opensource.faculty.ai/examples/) for more information.
+  <p align="center">
+    <a href="https://youthbitdashboard.onrender.com/compare"><strong>Демо »</strong></a>
+  </p>
+</div>
 
-## Install and Setup
+### **Использованные Технологии**
 
-To start working on our app, you'll want to make sure you are using a virtual environment, so you can manage your packages properly.
-To create an environment, install requirements, and run the app, use the following:
+- ![Dash](https://img.shields.io/badge/dash-008DE4?style=for-the-badge&logo=dash&logoColor=white)
+- ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+- ![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white)
+- ![Plotly](https://img.shields.io/badge/Plotly-%233F4F75.svg?style=for-the-badge&logo=plotly&logoColor=white)
+- ![Gunicorn](https://img.shields.io/badge/gunicorn-%298729.svg?style=for-the-badge&logo=gunicorn&logoColor=white)
 
-```bash
-python -m venv .venv                            # create virtual environment
-.venv\Scripts\pip install -r requirements.txt   # install requirements
-.venv\Scripts\python src\app.py                 # run the application
-```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Требования к установке
+
+- [Python: 3.8+](https://www.python.org/)
+
+- [pip: 20+](https://pypi.org/project/pip/)
+
+### Установка
+
+1. Загрузите локальную версию репозитория
+   ```sh
+   git clone https://github.com/dmitrykulakovfrontend/YouthBitDashboard.git
+   ```
+2. Перейдите в загруженный репозиторий
+   ```sh
+   cd YouthBitDashboard
+   ```
+3. Создайте виртуальное пространство:
+   ```sh
+   python -m venv .venv
+   ```
+4. Установите все необходимые пакеты:
+   ```sh
+   .venv\Scripts\pip install -r requirements.txt
+   ```
+5. Запустите app.py:
+   ```sh
+   .venv\Scripts\python src\app.py
+   ```
+
+[contributors-shield]: https://img.shields.io/github/contributors/dmitrykulakovfrontend/YouthBitDashboard.svg?style=for-the-badge
+[contributors-url]: https://github.com/dmitrykulakovfrontend/YouthBitDashboard/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/dmitrykulakovfrontend/YouthBitDashboard.svg?style=for-the-badge
+[forks-url]: https://github.com/dmitrykulakovfrontend/YouthBitDashboard/network/members
+[stars-shield]: https://img.shields.io/github/stars/dmitrykulakovfrontend/YouthBitDashboard.svg?style=for-the-badge
+[stars-url]: https://github.com/dmitrykulakovfrontend/YouthBitDashboard/stargazers
+[issues-shield]: https://img.shields.io/github/issues/dmitrykulakovfrontend/YouthBitDashboard.svg?style=for-the-badge
+[issues-url]: https://github.com/dmitrykulakovfrontend/YouthBitDashboard/issues
