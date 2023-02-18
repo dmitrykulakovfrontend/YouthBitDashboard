@@ -24,7 +24,7 @@ compare = html.Div(
     [
         html.H1('Сравнение регионов и округов',
                 style={'color': "#897AD6"}),
-        html.Label('Выберите 2 региона/округа для сравнения'),
+        html.Label('Выберите 2 региона/округа для сравнения', style={"text-align": "center", "width": "100%"}),
         html.Div([
             dcc.Dropdown(
                 options=[
@@ -47,10 +47,10 @@ compare = html.Div(
                 placeholder="Регион 2"
             )
         ],
-            style={"display": "flex", "gap": "20px"}),
+            style={"display": "flex", "gap": "20px", "justify-content": "center"}),
             html.Div([card(22,223,'Бюджет', True),
             card(223,150,'Волонтеры'),
-            card(2222,13111,'СМИ расходы', True)], style={"display": "flex", "gap": "20px", "margin": "1rem 0" }),
+            card(2222,13111,'СМИ расходы', True)], style={"display": "flex", "gap": "20px", "margin": "1rem 0", "flex-wrap": "wrap", "justify-content": "center" }),
             
             dcc.Graph(id='bar-chart')
     ]
