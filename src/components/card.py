@@ -1,27 +1,37 @@
-# package imports
-import dash
-from dash import html, dcc, callback, Input, Output
-# -*- coding: utf-8 -*-
-import dash
-from dash import Input, Output, dcc, html
+from dash import html
+import dash_bootstrap_components as dbc
+import uuid
+import locale
+
+# set the locale to the default system locale
+locale.setlocale(locale.LC_ALL, '')
+
+colors = {
+    "red": "#FF3A29",
+    "green": "#34B53A",
+    "orange": "#F2994A"
+}
 
 
-def card(value, value2, name,  dollar=False):
-    percentage_difference = ((value - value2) / value2) * 100
-    if percentage_difference >= 0:
-        percentage_difference = "+" + "{:.2f}".format(percentage_difference) + "%"
-    else:
-        percentage_difference = "{:.2f}".format(percentage_difference) + "%"
-    print()
+def card(value, secondaryValue, secondaryName, name, money=False, color="green"):
+    id = str(uuid.uuid4())
+    color = colors[color]
+    print(value)
     return html.Div([
         html.Span(name, style={"color": "#809FB8"}),
         html.Div([
-            html.Span("{:.2f}".format(value) + " $" if dollar == True else value, style={
-                      "font-size": "1.5rem", "font-weight": "bold", }),
-            html.Span("{:.2f}".format(value2) + " $" if dollar == True else value2, style={"font-size": "1.5rem",
-                      "font-weight": "bold", "color": "#A1A7B1"}),
-        ], style={"display": "flex", "gap": "20px", }),
+            html.Span(
+                children=(locale.currency(value, grouping=True) if money == True else value), style={"font-size": "1.5rem", "font-weight": "500"})
+        ], style={"display": "flex", "gap": "20px"}),
         html.P(
-[html.Span(percentage_difference, style={"color": "#34B53A" if value > value2 else "#FF3A29", "font-size": "1.5rem", "font-weight": "500"}), " Относительно сравниваемого"], style={"margin": "0", "display": "flex", "flex-direction": "column" })
+            [html.Span(locale.currency(secondaryValue, grouping=True) if money == True else secondaryValue, style={"color": color, "font-size": "1rem", "font-weight": "500"}), secondaryName], style={"margin": "0", "display": "flex", "flex-direction": "column"}),
+        dbc.Tooltip(
+            [html.P("Список действий для улучшения ситуации:"), html.P(
+                "1. Действие 1"), html.P(
+                "2. Действие 2")],
+            target=id,
+            placement="right",
+            style={"backgroundColor": "red !important"}
+        )
 
-    ], style={"border": "1px solid #E0E0E0", "padding": "0.5rem", "width": "fit-content", "min-width": "240px", "border-radius": "16px", })
+    ], id=id, style={"border": "1px solid #E0E0E0", "padding": "0.5rem", "width": "fit-content", "min-width": "240px", "border-radius": "16px", })

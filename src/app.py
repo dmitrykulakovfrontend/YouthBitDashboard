@@ -17,6 +17,7 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
 from dash import Input, Output, dcc, html
+from pages.regions import regions
 from pages.compare import compare
 roboto_flex = "https://fonts.cdnfonts.com/css/roboto-flex"
 app = dash.Dash(__name__, suppress_callback_exceptions=True,
@@ -59,16 +60,12 @@ sidebar = html.Div(
             [
                 dbc.NavLink([
                     html.I(className="bi bi-house-door-fill me-2"),
-                    "Dashboard",
+                    "Регионы",
                 ], href="/", active="exact"),
                 dbc.NavLink([
                     html.I(className="bi bi-house-door-fill me-2"),
                     "Сравнение",
                 ], href="/compare", active="exact"),
-                dbc.NavLink([
-                    html.I(className="bi bi-house-door-fill me-2"),
-                    "Page 2",
-                ], href="/page-2", active="exact"),
 
             ],
             vertical=True,
@@ -102,11 +99,9 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar,
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname == "/":
-        return [html.P("This is the content of the home page!")]
+        return regions
     elif pathname == "/compare":
-        return compare,
-    elif pathname == "/page-2":
-        return html.P("Oh cool, this is page 2!")
+        return compare
     # If the user tries to reach a different page, return a 404 message
     return html.Div(
         [

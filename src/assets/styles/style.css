@@ -1,10 +1,10 @@
 /* overwrite bootstrap default styles */
 .nav a:hover {
   background-color: rgba(9, 35, 79, 0.25) !important;
-  color: #B3E427 !important;
+  color: #b3e427 !important;
 }
 .nav a.active {
-  background-color: #B3E427 !important;
+  background-color: #b3e427 !important;
   color: black !important;
   box-shadow: inset 2px 2px 4px hsl(76, 35%, 52%);
 }
@@ -18,7 +18,7 @@
 }
 
 .nav {
-  gap:10px !important;
+  gap: 10px !important;
 }
 
 .nav i {
@@ -27,17 +27,40 @@
 
 .menu-button {
   display: none;
-  background-color: #B3E427;
+  background-color: #b3e427;
   border: none;
   border-radius: 8px;
-  transition: all 0.2s ease-out ;
+  transition: all 0.2s ease-out;
 }
 
 .menu-button:hover {
   background-color: hsl(76, 55%, 52%);
 }
 
-@media screen and (max-width: 768px)  {
+.tooltip-inner {
+  background-color: #897ad6;
+  box-shadow: 0px 0px 4px black;
+  opacity: 1 !important;
+}
+.tooltip.bs-tooltip-right .tooltip-arrow::before {
+  border-right-color: #897ad6 !important;
+}
+.tooltip.bs-tooltip-left .tooltip-arrow::before {
+  border-right-color: #897ad6 !important;
+}
+.tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+  border-right-color: #897ad6 !important;
+}
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+  border-right-color: #897ad6 !important;
+}
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+  border-right-color: #897ad6 !important;
+}
+.tooltip.bs-tooltip-end .tooltip-arrow::before {
+  border-right-color: #897ad6 !important;
+}
+@media screen and (max-width: 768px) {
   .sidebar {
     left: -100vw !important;
   }
