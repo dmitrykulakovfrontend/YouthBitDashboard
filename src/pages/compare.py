@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 
 @callback(Output('bar-chart', 'children'),Input('first', 'value'), Input('second', 'value'))
 def display_output(first, second):
-    if len(first) == 0 or len(second) == 0: return ''
+    if first == None or second == None: return ''
     print(f'Регион {first}')
     print(f'Регион {second}')
     fig = go.Figure(data=[
@@ -28,9 +28,9 @@ compare = html.Div(
                     {'label': 'Регион 2', 'value': '2'},
                     {'label': 'Регион 3', 'value': '3'}
                 ],
-                value=[],
                 id='first',
-                style={"min-width": "200px"}
+                style={"min-width": "200px"},
+                placeholder="Регион 1"
             ),
             dcc.Dropdown(
                 options=[
@@ -38,12 +38,12 @@ compare = html.Div(
                     {'label': 'Регион 2', 'value': '2'},
                     {'label': 'Регион 3', 'value': '3'}
                 ],
-                value=[],
                 id='second',
-                style={"min-width": "200px"}
+                style={"min-width": "200px"},
+                placeholder="Регион 2"
             )
         ],
-            style={"display": "flex", "justify-content": "space-around"}),
+            style={"display": "flex", "gap": "20px"}),
             html.Div([card(22,223,'Бюджет', True),
             card(223,150,'Волонтеры'),
             card(2222,13111,'СМИ расходы', True)], style={"display": "flex", "gap": "20px", "margin": "1rem" }),
