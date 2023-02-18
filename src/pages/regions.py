@@ -7,6 +7,12 @@ import plotly.graph_objects as go
 
 df = pd.read_csv('out.csv')
 
+
+@callback(Output("charts", "style"),  Input("region", "value"), Input("type", "value"))
+def toggle_menu(val1, val2):
+    if val1 == None or val2 == None: return {"display": "none"}
+    return {"display": "flex"}
+
 @callback(Output("cards", "children"),Output('histogram', "figure"),Output('histogram2', "figure"), Input("region", "value"), Input("type", "value"))
 def display_region_info(region_name, type):
     default_fig = go.Figure(data=[
@@ -77,7 +83,7 @@ regions = html.Div(
             style={"display": "flex", "gap": "20px", "justify-content": "center"}),
             html.Div(id="cards", style={"display": "flex", "gap": "20px", "margin": "1rem 0", "flex-wrap": "wrap", "justify-content": "center" }),
             html.Div([dcc.Graph(id="histogram",),
-            dcc.Graph(id="histogram2",)], style={"display": "flex"})
+            dcc.Graph(id="histogram2",)], style={"display": "flex"}, id="charts")
             
     ]
 )

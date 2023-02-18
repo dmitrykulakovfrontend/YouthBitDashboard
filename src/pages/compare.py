@@ -4,6 +4,12 @@ import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
 
+@callback(Output("bar-chart", "style"),  Input('dropdown', 'value'))
+def toggle_menu(val):
+    if len(val) < 2: return {"display": "none"}
+    return {"display": "flex"}
+
+
 @callback(Output('bar-chart', 'figure'),Input('dropdown', 'value'))
 def display_output(values):
     if len(values) < 2: return go.Figure(data=[
