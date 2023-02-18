@@ -102,10 +102,7 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar,
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname == "/":
-        return [html.P("This is the content of the home page!"), dcc.Graph(
-            id='life-exp-vs-gdp',
-            figure=fig
-        )]
+        return [html.P("This is the content of the home page!")]
     elif pathname == "/compare":
         return compare,
     elif pathname == "/page-2":
