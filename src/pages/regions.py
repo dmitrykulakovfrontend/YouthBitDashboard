@@ -11,7 +11,7 @@ df = pd.read_csv('https://raw.githubusercontent.com/dmitrykulakovfrontend/YouthB
 @callback(Output("charts", "style"),  Input("region", "value"), Input("type", "value"))
 def toggle_menu(val1, val2):
     if val1 == None or val2 == None: return {"display": "none"}
-    return {"display": "flex", "position": "relative", "right": "50px"}
+    return {"display": "flex", "position": "relative", "right": "25px"}
 
 @callback(Output("cards", "children"),Output('histogram', "figure"),Output('histogram2', "figure"), Input("region", "value"), Input("type", "value"))
 def display_region_info(region_name, type):
@@ -42,20 +42,37 @@ def display_region_info(region_name, type):
     y4 = filtered_df['Численность ПиП'].iloc[0]
     y5 = filtered_df['Численность других отделений'].iloc[0]
 
+    titles= ['Развитие международного <br>и межрегионального<br> молодeжного сотрудничества', 'Патриотическое <br>воспитание молодeжи', 'Волонтёрская<br>деятельность', 'Содействие<br> в подготовке и переподготовке <br>специалистов', 'Другие<br> отделения']
+
+
     print(y1, y2, y3, y4, y5)
 
     color = "green" if population_involvement == "Высокий" else "red" if population_involvement == "Низкий" else "orange"
 
     fig = go.Figure(data=[
-            go.Bar( y=['Бюджет Развития международного <br>и межрегионального молодeжного<br> сотрудничества', 'Бюджет Патриотического <br>воспитание молодeжи', 'Бюджет Волонтёрской<br>деятельности', 'Бюджет Содействия<br> в подготовке и переподготовке <br>специалистов', 'Бюджет других<br> отделений'], x=[x1,x2,x3,x4,x5], orientation='h',
+            go.Bar( y=titles, x=[x1,x2,x3,x4,x5], orientation='h',
     marker_color='#b3e427')
     ])
     fig2 = go.Figure(data=[
-            go.Bar( y=['Численность Развития<br> международного и межрегионального<br> молодeжного сотрудничества', 'Численность Патриотического <br>воспитание молодeжи', 'Численность Волонтёрской<br> деятельности', 'Численность Содействия<br> в подготовке и переподготовке<br> специалистов', 'Численность других<br> расходов'], x=[y1,y2,y3,y4,y5], orientation='h',
+            go.Bar( y=titles, x=[y1,y2,y3,y4,y5], orientation='h',
     marker_color='#897AD6' )
     ])
-    fig.update_layout(title="Бюджет")
-    fig2.update_layout(title="Численность")
+    fig.update_traces(
+    hoverlabel_font_color='white'
+)
+    fig2.update_traces(
+    hoverlabel_font_color='white'
+)
+    fig.update_layout(title={"text":"Бюджет",
+    "y": 1,
+    "x": 0.65,
+    "yanchor": "top",
+    "xanchor": "center"}, margin=dict(l=0, r=0, t=50, b=0))
+    fig2.update_layout(title={"text":"Численность",
+    "y": 1,
+    "x": 0.65,
+    "yanchor": "top",
+    "xanchor": "center"},margin=dict(l=0, r=0, t=50, b=0))
     return [card(budget,budget_per_person,'Бюджет на человека','Бюджет', True),
             card(youth_involvement,population_involvement,'Уровень вовлеченности населения','Количество вовлеченной молодежи', color=color)], fig, fig2
 

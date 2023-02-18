@@ -1,10 +1,6 @@
 from dash import html
 import dash_bootstrap_components as dbc
 import uuid
-import locale
-
-# set the locale to the default system locale
-locale.setlocale(locale.LC_ALL, ('ru_RU', 'UTF-8'))
 
 colors = {
     "red": "#FF3A29",
@@ -21,10 +17,10 @@ def card(value, secondaryValue, secondaryName, name, money=False, color="green")
         html.Span(name, style={"color": "#809FB8"}),
         html.Div([
             html.Span(
-                children=(locale.currency(value, grouping=True) if money == True else value), style={"font-size": "1.5rem", "font-weight": "500"})
+                children=('{:,.2f} ₽'.format(value) if money == True else value), style={"font-size": "1.5rem", "font-weight": "500"})
         ], style={"display": "flex", "gap": "20px"}),
         html.P(
-            [html.Span(locale.currency(secondaryValue, grouping=True) if money == True else secondaryValue, style={"color": color, "font-size": "1rem", "font-weight": "500"}), secondaryName], style={"margin": "0", "display": "flex", "flex-direction": "column"}),
+            [html.Span('{:,.2f} ₽'.format(secondaryValue) if money == True else secondaryValue, style={"color": color, "font-size": "1rem", "font-weight": "500"}), secondaryName], style={"margin": "0", "display": "flex", "flex-direction": "column"}),
         dbc.Tooltip(
             [html.P("Список действий для улучшения ситуации:"), html.P(
                 "1. Действие 1"), html.P(
