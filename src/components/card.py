@@ -12,7 +12,6 @@ colors = {
 def card(value, secondaryValue, secondaryName, name, money=False, color="green"):
     id = str(uuid.uuid4())
     color = colors[color]
-    print(value)
     return html.Div([
         html.Span(name, style={"color": "#809FB8"}),
         html.Div([
@@ -20,7 +19,7 @@ def card(value, secondaryValue, secondaryName, name, money=False, color="green")
                 children=('{:,.2f} ₽'.format(value) if money == True else value), style={"font-size": "1.5rem", "font-weight": "500"})
         ], style={"display": "flex", "gap": "20px"}),
         html.P(
-            [html.Span('{:,.2f} ₽'.format(secondaryValue) if money == True else secondaryValue, style={"color": color, "font-size": "1rem", "font-weight": "500"}), secondaryName], style={"margin": "0", "display": "flex", "flex-direction": "column"}),
+            [html.Span('{:,.2f} ₽'.format(secondaryValue) if money == True and not isinstance(secondaryValue, str) else secondaryValue, style={"color": color, "font-size": "1rem", "font-weight": "500"}), secondaryName], style={"margin": "0", "display": "flex", "flex-direction": "column"}),
         dbc.Tooltip(
             [html.P("Список действий для улучшения ситуации:"), html.P(
                 "1. Действие 1"), html.P(

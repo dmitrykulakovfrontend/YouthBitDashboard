@@ -4,8 +4,11 @@ from components.card import card
 import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as pio
+from plotly.subplots import make_subplots
 
 df = pd.read_csv('https://raw.githubusercontent.com/dmitrykulakovfrontend/YouthBitDashboard/main/out.csv')
+df_massmedia = pd.read_csv('https://raw.githubusercontent.com/dmitrykulakovfrontend/YouthBitDashboard/main/main.csv')
 
 
 @callback(Output("charts", "style"),  Input("region", "value"), Input("type", "value"))
@@ -13,70 +16,196 @@ def toggle_menu(val1, val2):
     if val1 == None or val2 == None: return {"display": "none"}
     return {"display": "flex", "position": "relative", "right": "25px"}
 
-@callback(Output("cards", "children"),Output('histogram', "figure"),Output('histogram2', "figure"), Input("region", "value"), Input("type", "value"))
+
+
+@callback(Output("cards", "children"),Output('charts', "children"), Input("region", "value"), Input("type", "value"))
 def display_region_info(region_name, type):
-    default_fig = go.Figure(data=[
-            go.Bar(name='test', y=["Признак 1", "Признак 2", 'Признак 3'], x=[20, 14, 23], orientation='h')
-    ])
-    default_fig2 = go.Figure(data=[
-            go.Bar(name='test', y=["Признак 1", "Признак 2", 'Признак 3'], x=[20, 14, 23], orientation='h')
-    ])
-    if region_name == None or type == None: return '', default_fig, default_fig2
+    if region_name == None or type == None: return '',''
+    if type == "СМИ":
+      filtered_df = df_massmedia.loc[df['Регион'] == region_name]
 
-    filtered_df = df.loc[df['Регион'] == region_name]
+      financings = filtered_df["Финансирование"].iloc[0]
+      financings_percentage = filtered_df["Финансирование, тенденция"].iloc[0]
 
-    population_involvement = filtered_df['Уровень вовлеченности населения'].iloc[0]
-    youth_involvement = filtered_df['Общее количество вовлеченной молодежи'].iloc[0]
-    budget = filtered_df['Бюджет'].iloc[0]
-    budget_per_person = filtered_df['Бюджет на человек'].iloc[0]
+      visitors = filtered_df["Кол-во просмотров сайта"].iloc[0]
+      visitors_percentage = filtered_df["Кол-во просмотров сайта, тенденция"].iloc[0]
+
+      subscribers = filtered_df["Число подписчиков сообщества"].iloc[0]
+      subscribers_percentage = filtered_df["Число подписчиков сообщества, тенденция"].iloc[0]
+
+      financings_card = card(financings,financings_percentage,'Финансирование, тенденция','Финансирование', True)
+      visitors_card = card(visitors,visitors_percentage,"Кол-во просмотров сайта, тенденция","Кол-во просмотров сайта")
+      subscribers_card = card(subscribers,subscribers_percentage,"Число подписчиков сообщества, тенденция","Число подписчиков сообщества")
+      x1 = filtered_df["В ТВ-сюжетах"].iloc[0]
+      x2 = filtered_df['В интернет-СМИ'].iloc[0]
+      x3 = filtered_df['В печатных СМИ'].iloc[0]
+
+      y1 = filtered_df['Кол-во новостей'].iloc[0]
+      y2 = filtered_df['Кол-во публикаций в соц. сетях'].iloc[0]
+      y3 = filtered_df['Кол-во печатных статей'].iloc[0]
+      y4 = filtered_df['Кол-во электронных статей'].iloc[0]
+
+      titles_mentions = ["В ТВ-сюжетах", 'В интернет-СМИ', 'В печатных СМИ']
+      titles_publications = ["Кол-во новостей", 'Кол-во публикаций в соц. сетях', 'Кол-во печатных статей','Кол-во электронных статей']
+
+      mentions_values = [x1, x2, x3]
+      publications_values = [y1, y2, y3, y4]
+
+      mentions_objects = [{'value': val, 'title': title} for val, title in zip(mentions_values, titles_mentions)]
+      publications_objects = [{'value': val, 'title': title} for val, title in zip(publications_values, titles_publications)]
+
+      sorted_mentions_objects = sorted(mentions_objects, key=lambda obj: obj['value'])
+      sorted_publications_objects = sorted(publications_objects, key=lambda obj: obj['value'])
+
+      mentions_values = [object["value"] for object in sorted_mentions_objects]
+      publications_values = [object["value"] for object in sorted_publications_objects]
+
+      mentions_titles = [object["title"] for object in sorted_mentions_objects]
+      publications_titles = [object["title"] for object in sorted_publications_objects]
+
+      fig = go.Figure(data=[
+              go.Bar( y=mentions_titles, x=mentions_values, orientation='h',
+      marker_color='#b3e427', name="", showlegend=True)
+      ])
+      fig2 = go.Figure(data=[
+              go.Bar( y=publications_titles, x=publications_values, orientation='h',
+      marker_color='#897AD6', name="", showlegend=True )
+      ])
+      pie = go.Figure(data=[go.Pie(labels=['Oxygen','Hydrogen','Carbon_Dioxide','Nitrogen'], values=[4500, 2500, 1053, 500])])
+      fig.update_traces(
+      hoverlabel_font_color='white'
+  )
+      fig2.update_traces(
+      hoverlabel_font_color='white'
+  )
+      fig.update_layout(legend={
+          "title":'<b>Количество упоминаний молодежной организации</b>',
+          "font":{
+              "family":'Arial, sans-serif',
+              "size":14,
+              "color":'black'
+          },
+          "traceorder":'normal',
+          "y": 1,
+          "x": 0.5,
+          "orientation": "h",
+          "yanchor":'bottom',
+          "xanchor":'center',
+      }, margin=dict(l=0, r=0, t=50, b=0))
+      fig2.update_layout(legend={
+          "title":'<b>Количество публикаций:</b>',
+          "font":{
+              "family":'Arial, sans-serif',
+              "size":14,
+              "color":'black'
+          },
+          "traceorder":'normal',
+          "y": 1,
+          "x": 0.5,
+          "orientation": "h",
+          "yanchor":'bottom',
+          "xanchor":'center',
+      },margin=dict(l=0, r=0, t=50, b=0))
+      
+      fig = make_subplots(rows=1, cols=3, shared_yaxes=False)
+
+      fig.add_trace(fig.data[0], row=1, col=1)
+      fig.add_trace(fig2.data[0], row=1, col=2)
+      fig.add_trace(pie.data[0], row=1, col=3)
+
+      fig.update_layout(
+          height=400,
+          width=1000,
+          showlegend=False
+      )
+      return [financings_card,visitors_card,subscribers_card], [dcc.Graph(id="histogram",figure=fig),dcc.Graph(id="histogram2", figure=fig2),dcc.Graph(id="pie", figure=pie)]
+      # [dcc.Graph(id="histogram",figure=fig),
+      #         dcc.Graph(id="histogram2", figure=fig2)]
+    elif type == "Основное":
+
+      filtered_df = df.loc[df['Регион'] == region_name]
+      population_involvement = filtered_df['Уровень вовлеченности населения'].iloc[0]
+      youth_involvement = filtered_df['Общее количество вовлеченной молодежи'].iloc[0]
+      budget = filtered_df['Бюджет'].iloc[0]
+      budget_per_person = filtered_df['Бюджет на человек'].iloc[0]
+      
+      x1 = filtered_df["Бюджет МиММ"].iloc[0]
+      x2 = filtered_df['Бюджет ПВ'].iloc[0]
+      x3 = filtered_df['Бюджет ВД'].iloc[0]
+      x4 = filtered_df['Бюджет ПиП'].iloc[0]
+      x5 = filtered_df['Бюджет других расходов'].iloc[0]
+
+      y1 = filtered_df['Численность МиММ'].iloc[0]
+      y2 = filtered_df['Численность ПВ'].iloc[0]
+      y3 = filtered_df['Численность ВД'].iloc[0]
+      y4 = filtered_df['Численность ПиП'].iloc[0]
+      y5 = filtered_df['Численность других отделений'].iloc[0]
+
+      titles = ['Развитие международного <br>и межрегионального<br> молодeжного сотрудничества', 'Патриотическое <br>воспитание молодeжи', 'Волонтёрская<br>деятельность', 'Содействие в подготовке<br> и переподготовке специалистов', 'Другие<br> отделения']
+      budget_values = [x1, x2, x3, x4, x5]
+      amount_values = [y1, y2, y3, y4, y5]
+
+      budget_objects = [{'value': val, 'title': title} for val, title in zip(budget_values, titles)]
+      amount_objects = [{'value': val, 'title': title} for val, title in zip(amount_values, titles)]
+
+      sorted_budget_objects = sorted(budget_objects, key=lambda obj: obj['value'])
+      sorted_amount_objects = sorted(amount_objects, key=lambda obj: obj['value'])
+
+      budget_values = [object["value"] for object in sorted_budget_objects]
+      amount_values = [object["value"] for object in sorted_amount_objects]
+
+      budget_titles = [object["title"] for object in sorted_budget_objects]
+      amount_titles = [object["title"] for object in sorted_amount_objects]
+
+      color = "green" if population_involvement == "Высокий" else "red" if population_involvement == "Низкий" else "orange"
+
+      fig = go.Figure(data=[
+              go.Bar( y=budget_titles, x=budget_values, orientation='h',
+      marker_color='#b3e427', name="В рублях", showlegend=True)
+      ])
+      fig2 = go.Figure(data=[
+              go.Bar( y=amount_titles, x=amount_values, orientation='h',
+      marker_color='#897AD6', name="Кол-во людей", showlegend=True )
+      ])
+      fig.update_traces(
+      hoverlabel_font_color='white'
+  )
+      fig2.update_traces(
+      hoverlabel_font_color='white'
+  )
+      fig.update_layout(legend={
+          "title":'<b>Бюджет</b>',
+          "font":{
+              "family":'Arial, sans-serif',
+              "size":14,
+              "color":'black'
+          },
+          "traceorder":'normal',
+          "y": 1,
+          "x": 0.5,
+          "orientation": "h",
+          "yanchor":'bottom',
+          "xanchor":'center',
+      }, margin=dict(l=0, r=0, t=50, b=0))
+      fig2.update_layout(legend={
+          "title":'<b>Численность</b>',
+          "font":{
+              "family":'Arial, sans-serif',
+              "size":14,
+              "color":'black'
+          },
+          "traceorder":'normal',
+          "y": 1,
+          "x": 0.5,
+          "orientation": "h",
+          "yanchor":'bottom',
+          "xanchor":'center',
+      },margin=dict(l=0, r=0, t=50, b=0))
+      return [card(budget,budget_per_person,'Бюджет на человека','Бюджет', True),
+              card(youth_involvement,population_involvement,'Уровень вовлеченности населения','Количество вовлеченной молодежи', color=color)], [dcc.Graph(id="histogram",figure=fig),
+              dcc.Graph(id="histogram2", figure=fig2)]
     
-    x1 = filtered_df["Бюджет МиММ"].iloc[0]
-    x2 = filtered_df['Бюджет ПВ'].iloc[0]
-    x3 = filtered_df['Бюджет ВД'].iloc[0]
-    x4 = filtered_df['Бюджет ПиП'].iloc[0]
-    x5 = filtered_df['Бюджет других расходов'].iloc[0]
-
-    y1 = filtered_df['Численность МиММ'].iloc[0]
-    y2 = filtered_df['Численность ПВ'].iloc[0]
-    y3 = filtered_df['Численность ВД'].iloc[0]
-    y4 = filtered_df['Численность ПиП'].iloc[0]
-    y5 = filtered_df['Численность других отделений'].iloc[0]
-
-    titles= ['Развитие международного <br>и межрегионального<br> молодeжного сотрудничества', 'Патриотическое <br>воспитание молодeжи', 'Волонтёрская<br>деятельность', 'Содействие<br> в подготовке и переподготовке <br>специалистов', 'Другие<br> отделения']
-
-
-    print(y1, y2, y3, y4, y5)
-
-    color = "green" if population_involvement == "Высокий" else "red" if population_involvement == "Низкий" else "orange"
-
-    fig = go.Figure(data=[
-            go.Bar( y=titles, x=[x1,x2,x3,x4,x5], orientation='h',
-    marker_color='#b3e427')
-    ])
-    fig2 = go.Figure(data=[
-            go.Bar( y=titles, x=[y1,y2,y3,y4,y5], orientation='h',
-    marker_color='#897AD6' )
-    ])
-    fig.update_traces(
-    hoverlabel_font_color='white'
-)
-    fig2.update_traces(
-    hoverlabel_font_color='white'
-)
-    fig.update_layout(title={"text":"Бюджет",
-    "y": 1,
-    "x": 0.65,
-    "yanchor": "top",
-    "xanchor": "center"}, margin=dict(l=0, r=0, t=50, b=0))
-    fig2.update_layout(title={"text":"Численность",
-    "y": 1,
-    "x": 0.65,
-    "yanchor": "top",
-    "xanchor": "center"},margin=dict(l=0, r=0, t=50, b=0))
-    return [card(budget,budget_per_person,'Бюджет на человека','Бюджет', True),
-            card(youth_involvement,population_involvement,'Уровень вовлеченности населения','Количество вовлеченной молодежи', color=color)], fig, fig2
-
-
+    return "Ошибка", "Такого типа данных нет"
 regions = html.Div(
     [
         html.H1('Информация о регионах',
@@ -94,7 +223,7 @@ regions = html.Div(
             dcc.Dropdown(
                 options=[
     # {'label': '{}'.format(name), 'value': '{}'.format(name)} for name in df.columns[1:]
-    "Основное"
+    "Основное", "СМИ"
                 ],
                 id='type',
                 style={"min-width": "300px"},
@@ -103,8 +232,7 @@ regions = html.Div(
         ],
             style={"display": "flex", "gap": "20px", "justify-content": "flex-start"}),
             html.Div(id="cards", style={"display": "flex", "gap": "20px", "margin": "1rem 0", "flex-wrap": "wrap", "justify-content": "flex-start" }),
-            html.Div([dcc.Graph(id="histogram",),
-            dcc.Graph(id="histogram2",)], style={"display": "flex"}, id="charts")
+            html.Div([], style={"display": "flex"}, id="charts")
             
     ]
 )
