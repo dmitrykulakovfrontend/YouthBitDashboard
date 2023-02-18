@@ -4,7 +4,7 @@ import uuid
 import locale
 
 # set the locale to the default system locale
-locale.setlocale('ru_RU', 'UTF-8')
+locale.setlocale(locale.LC_ALL, ('ru_RU', 'UTF-8'))
 
 colors = {
     "red": "#FF3A29",
