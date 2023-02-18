@@ -42,6 +42,8 @@ def display_region_info(region_name, type):
     y4 = filtered_df['Численность ПиП'].iloc[0]
     y5 = filtered_df['Численность других отделений'].iloc[0]
 
+    print(y1, y2, y3, y4, y5)
+
     color = "green" if population_involvement == "Высокий" else "red" if population_involvement == "Низкий" else "orange"
 
     fig = go.Figure(data=[
@@ -50,12 +52,9 @@ def display_region_info(region_name, type):
     fig2 = go.Figure(data=[
             go.Bar( y=['Численность Развития<br> международного и межрегионального<br> молодeжного сотрудничества', 'Численность Патриотического <br>воспитание молодeжи', 'Численность Волонтёрской<br> деятельности', 'Численность Содействия<br> в подготовке и переподготовке<br> специалистов', 'Численность других<br> расходов'], x=[y1,y2,y3,y4,y5], orientation='h')
     ])
-    fig.update_layout( bargap=0.30)
-    fig2.update_layout( bargap=1)
 
     return [card(budget,budget_per_person,'Бюджет на человека','Бюджет', True),
             card(youth_involvement,population_involvement,'Уровень вовлеченности населения','Количество вовлеченной молодежи', color=color)], fig, fig2
-print(df)
 
 
 regions = html.Div(
