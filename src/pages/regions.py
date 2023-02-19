@@ -18,9 +18,9 @@ def toggle_menu(val1, val2):
 
 
 
-@callback(Output("cards", "children"),Output('charts', "children"), Input("region", "value"), Input("type", "value"))
+@callback(Output("cards", "children"),Output('charts', "children"), Output("cards", "style"), Input("region", "value"), Input("type", "value"))
 def display_region_info(region_name, type):
-    if region_name == None or type == None: return '',''
+    if region_name == None or type == None: return '','',{}
     if type == "СМИ":
       filtered_df = df_massmedia.loc[df['Регион'] == region_name]
 
@@ -46,7 +46,7 @@ def display_region_info(region_name, type):
       y4 = filtered_df['Кол-во электронных статей'].iloc[0]
 
       titles_mentions = ["В ТВ-сюжетах", 'В интернет-СМИ', 'В печатных СМИ']
-      titles_publications = ["Кол-во новостей", 'Кол-во публикаций в соц. сетях', 'Кол-во печатных статей','Кол-во электронных статей']
+      titles_publications = ["Кол-во новостей", 'Кол-во публикаций <br>в соц. сетях', 'Кол-во печатных<br> статей','Кол-во электронных<br> статей']
 
       mentions_values = [x1, x2, x3]
       publications_values = [y1, y2, y3, y4]
@@ -63,6 +63,10 @@ def display_region_info(region_name, type):
       mentions_titles = [object["title"] for object in sorted_mentions_objects]
       publications_titles = [object["title"] for object in sorted_publications_objects]
 
+      
+      unique_visitors = filtered_df['Число уникальных пользователей сайта'].iloc[0]
+      population = filtered_df['Население'].iloc[0]
+
       fig = go.Figure(data=[
               go.Bar( y=mentions_titles, x=mentions_values, orientation='h',
       marker_color='#b3e427', name="", showlegend=True)
@@ -71,13 +75,32 @@ def display_region_info(region_name, type):
               go.Bar( y=publications_titles, x=publications_values, orientation='h',
       marker_color='#897AD6', name="", showlegend=True )
       ])
-      pie = go.Figure(data=[go.Pie(labels=['Oxygen','Hydrogen','Carbon_Dioxide','Nitrogen'], values=[4500, 2500, 1053, 500])])
+      pie = go.Figure(data=[go.Pie(labels=['Число уникальных пользователей сайта','Население'], values=[unique_visitors, population],
+    domain={'x': [0.7, 0], 'y': [1, 0]}),])
       fig.update_traces(
       hoverlabel_font_color='white'
   )
       fig2.update_traces(
       hoverlabel_font_color='white'
   )
+      pie.update_traces(
+      hoverlabel_font_color='white',
+      hoverinfo='label+percent',
+                  marker=dict(colors=['#b3e427', '#897AD6'])
+  )
+      pie.update_layout(legend={
+          "title":'<b>Процент вовлеченности:</b>',
+          "font":{
+              "family":'Arial, sans-serif',
+              "size":14,
+              "color":'black'
+          },
+          "traceorder":'normal',
+        'y': 1,
+        'x': 0,
+        'yanchor': 'middle',
+        'xanchor': 'right',
+      }, margin=dict(l=0, r=0, t=50, b=0),width=500,height=300)
       fig.update_layout(legend={
           "title":'<b>Количество упоминаний молодежной организации</b>',
           "font":{
@@ -91,7 +114,7 @@ def display_region_info(region_name, type):
           "orientation": "h",
           "yanchor":'bottom',
           "xanchor":'center',
-      }, margin=dict(l=0, r=0, t=50, b=0))
+      }, margin=dict(l=0, r=0, t=50, b=0),width=500,height=300)
       fig2.update_layout(legend={
           "title":'<b>Количество публикаций:</b>',
           "font":{
@@ -105,20 +128,9 @@ def display_region_info(region_name, type):
           "orientation": "h",
           "yanchor":'bottom',
           "xanchor":'center',
-      },margin=dict(l=0, r=0, t=50, b=0))
+      },margin=dict(l=0, r=0, t=50, b=0),width=500,height=300)
       
-      fig = make_subplots(rows=1, cols=3, shared_yaxes=False)
-
-      fig.add_trace(fig.data[0], row=1, col=1)
-      fig.add_trace(fig2.data[0], row=1, col=2)
-      fig.add_trace(pie.data[0], row=1, col=3)
-
-      fig.update_layout(
-          height=400,
-          width=1000,
-          showlegend=False
-      )
-      return [financings_card,visitors_card,subscribers_card], [dcc.Graph(id="histogram",figure=fig),dcc.Graph(id="histogram2", figure=fig2),dcc.Graph(id="pie", figure=pie)]
+      return [financings_card,visitors_card,subscribers_card], [dcc.Graph(id="histogram",figure=fig),dcc.Graph(id="histogram2", figure=fig2),dcc.Graph(id="pie", figure=pie)],{"display": "flex", "gap": "20px", "margin": "1rem 0", "flex-wrap": "wrap", "justify-content": "space-between" }
       # [dcc.Graph(id="histogram",figure=fig),
       #         dcc.Graph(id="histogram2", figure=fig2)]
     elif type == "Основное":
@@ -203,7 +215,7 @@ def display_region_info(region_name, type):
       },margin=dict(l=0, r=0, t=50, b=0))
       return [card(budget,budget_per_person,'Бюджет на человека','Бюджет', True),
               card(youth_involvement,population_involvement,'Уровень вовлеченности населения','Количество вовлеченной молодежи', color=color)], [dcc.Graph(id="histogram",figure=fig),
-              dcc.Graph(id="histogram2", figure=fig2)]
+              dcc.Graph(id="histogram2", figure=fig2)],{"display": "flex", "gap": "20px", "margin": "1rem 0", "flex-wrap": "wrap", "justify-content": "flex-start" }
     
     return "Ошибка", "Такого типа данных нет"
 regions = html.Div(
@@ -231,7 +243,7 @@ regions = html.Div(
             )
         ],
             style={"display": "flex", "gap": "20px", "justify-content": "flex-start"}),
-            html.Div(id="cards", style={"display": "flex", "gap": "20px", "margin": "1rem 0", "flex-wrap": "wrap", "justify-content": "flex-start" }),
+            html.Div(id="cards", style={"display": "flex", "gap": "20px", "margin": "1rem 0", "flex-wrap": "wrap", "justify-content": "space-between" }),
             html.Div([], style={"display": "flex"}, id="charts")
             
     ]
