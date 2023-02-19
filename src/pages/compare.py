@@ -103,20 +103,69 @@ def display_info(regions):
 
     histogram_budget = go.Figure()
     for i, data in filtered_df.iterrows():
-        x1 = filtered_df["Бюджет МиММ"]
-        x2 = filtered_df['Бюджет ПВ']
-        x3 = filtered_df['Бюджет ВД']
-        x4 = filtered_df['Бюджет ПиП']
-        x5 = filtered_df['Бюджет других расходов']
+        x1 = data["Бюджет МиММ"]
+        x2 = data['Бюджет ПВ']
+        x3 = data['Бюджет ВД']
+        x4 = data['Бюджет ПиП']
+        x5 = data['Бюджет других расходов']
+        budget_values = [x1, x2, x3, x4, x5]
+        budget_objects = [{'value': val, 'title': title}
+                          for val, title in zip(budget_values, titles)]
+        sorted_budget_objects = sorted(
+            budget_objects, key=lambda obj: obj['value'])
+        budget_values = [object["value"] for object in sorted_budget_objects]
+        budget_titles = [object["title"] for object in sorted_budget_objects]
+
         histogram_budget.add_trace(go.Bar(
-            y=titles,
-            x=budget_values_1,
+            y=budget_titles,
+            x=budget_values,
             orientation='h',
-            marker_color='#b3e427',
-            name="В рублях",
+            name=data['Регион'],
             showlegend=True
         ))
-    return budget_cards, involvement_cards, []
+        histogram_budget.update_layout(legend={
+            "title": '<b>Бюджет</b>',
+            "font": {
+                "family": 'Arial, sans-serif',
+                "size": 14,
+                "color": 'black'
+            },
+            "traceorder": 'normal',
+        }, margin=dict(l=0, r=0, t=50, b=0))
+
+        histogram_amount = go.Figure()
+    for i, data in filtered_df.iterrows():
+        y1 = data['Численность МиММ']
+        y2 = data['Численность ПВ']
+        y3 = data['Численность ВД']
+        y4 = data['Численность ПиП']
+        y5 = data['Численность других отделений']
+        amount_values = [y1, y2, y3, y4, y5]
+        amount_objects = [{'value': val, 'title': title}
+                          for val, title in zip(amount_values, titles)]
+        sorted_amount_objects = sorted(
+            amount_objects, key=lambda obj: obj['value'])
+        amount_values = [object["value"] for object in sorted_amount_objects]
+        amount_titles = [object["title"] for object in sorted_amount_objects]
+
+        histogram_amount.add_trace(go.Bar(
+            y=amount_titles,
+            x=amount_values,
+            orientation='h',
+            name=data['Регион'],
+            showlegend=True
+        ))
+        histogram_amount.update_layout(legend={
+            "title": '<b>Численность</b>',
+            "font": {
+                "family": 'Arial, sans-serif',
+                "size": 14,
+                "color": 'black'
+            },
+            "traceorder": 'normal',
+        }, margin=dict(l=0, r=0, t=50, b=0))
+
+    return budget_cards, involvement_cards, [dcc.Graph("histogram_budget", figure=histogram_budget), dcc.Graph("histogram_amount", figure=histogram_amount)]
 # [card(budget, budget_per_person, 'Бюджет на человека', 'Бюджет', True),
 #             card(youth_involvement, population_involvement, 'Уровень вовлеченности населения', 'Количество вовлеченной молодежи', color=color)], []
     # [dcc.Graph(id="histogram", figure=fig),dcc.Graph(id="histogram2", figure=fig2)]
@@ -143,11 +192,11 @@ compare = html.Div(
             )
         ],
             style={"display": "flex", "gap": "20px", "justify-content": "center"}),
+        html.Div([], style={"display": "flex"}, id="regionsData"),
         html.Div([html.Div(id="regions_cards_budget", style={"display": "flex", "gap": "20px",
                                                              "margin": "1rem 0", "flex-wrap": "wrap", "justify-content": "flex-start", "flex-direction": "column"}),
                  html.Div(id="regions_cards_involvement", style={"display": "flex", "gap": "20px",
                                                                  "margin": "1rem 0", "flex-wrap": "wrap", "justify-content": "flex-start", "flex-direction": "column"})],
-                 style={"display": "flex", "gap": "60px"}),
-        html.Div([], style={"display": "flex"}, id="regionsData")
+                 style={"display": "flex", "gap": "30px", "justify-content": "space-between", "padding": "0 1rem", })
     ]
 )
