@@ -33,6 +33,8 @@
 
 - [pip: 20+](https://pypi.org/project/pip/)
 
+- [git](https://git-scm.com/)
+
 ### Установка
 
 1. Загрузите локальную версию репозитория
@@ -43,9 +45,9 @@
    ```sh
    cd YouthBitDashboard
    ```
-3. Создайте виртуальное пространство:
+3. Запустите эту команду для создания виртуального пространства и убедитесь что у вас появилась папка .venv:
    ```sh
-   python -m venv .venv
+   python -m venv .venv # или py -m venv .venv
    ```
 4. Установите все необходимые пакеты:
    ```sh
@@ -55,6 +57,7 @@
    ```sh
    .venv\Scripts\python src\app.py
    ```
+6. Сервер запущен на http://127.0.0.1:8050/
 
 [contributors-shield]: https://img.shields.io/github/contributors/dmitrykulakovfrontend/YouthBitDashboard.svg?style=for-the-badge
 [contributors-url]: https://github.com/dmitrykulakovfrontend/YouthBitDashboard/graphs/contributors

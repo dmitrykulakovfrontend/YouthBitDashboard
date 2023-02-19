@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 df = pd.read_csv(
-    'https://raw.githubusercontent.com/dmitrykulakovfrontend/YouthBitDashboard/main/out.csv')
+    'https://raw.githubusercontent.com/dmitrykulakovfrontend/YouthBitDashboard/main/main.csv')
 
 
 @callback(Output("regionsData", "style"),  Input('dropdown', 'value'))
@@ -27,75 +27,9 @@ def display_info(regions):
     colors = ["green" if value == "Высокий" else "red" if value ==
               "Низкий" else "orange" for value in population_involvement]
 
-    # y1 = filtered_df['Численность МиММ']
-    # y2 = filtered_df['Численность ПВ']
-    # y3 = filtered_df['Численность ВД']
-    # y4 = filtered_df['Численность ПиП']
-    # y5 = filtered_df['Численность других отделений']
-
     titles = ['Развитие международного <br>и межрегионального<br> молодeжного сотрудничества', 'Патриотическое <br>воспитание молодeжи',
               'Волонтёрская<br>деятельность', 'Содействие в подготовке<br> и переподготовке специалистов', 'Другие<br> отделения']
-    # budget_values = [x1, x2, x3, x4, x5]
-    # amount_values = [y1, y2, y3, y4, y5]
 
-    # budget_objects = [{'value': val, 'title': title}
-    #                   for val, title in zip(budget_values, titles)]
-    # amount_objects = [{'value': val, 'title': title}
-    #                   for val, title in zip(amount_values, titles)]
-
-    # sorted_budget_objects = sorted(
-    #     budget_objects, key=lambda obj: obj['value'])
-    # sorted_amount_objects = sorted(
-    #     amount_objects, key=lambda obj: obj['value'])
-
-    # budget_values = [object["value"] for object in sorted_budget_objects]
-    # amount_values = [object["value"] for object in sorted_amount_objects]
-
-    # budget_titles = [object["title"] for object in sorted_budget_objects]
-    # amount_titles = [object["title"] for object in sorted_amount_objects]
-
-    # fig = go.Figure(data=[
-    #     go.Bar(y=budget_titles, x=budget_values, orientation='h',
-    #                 marker_color='#b3e427', name="В рублях", showlegend=True)
-    # ])
-    # fig2 = go.Figure(data=[
-    #     go.Bar(y=amount_titles, x=amount_values, orientation='h',
-    #            marker_color='#897AD6', name="Кол-во людей", showlegend=True)
-    # ])
-    # fig.update_traces(
-    #     hoverlabel_font_color='white'
-    # )
-    # fig2.update_traces(
-    #     hoverlabel_font_color='white'
-    # )
-    # fig.update_layout(legend={
-    #     "title": '<b>Бюджет</b>',
-    #     "font": {
-    #         "family": 'Arial, sans-serif',
-    #         "size": 14,
-    #         "color": 'black'
-    #     },
-    #     "traceorder": 'normal',
-    #     "y": 1,
-    #     "x": 0.5,
-    #     "orientation": "h",
-    #     "yanchor": 'bottom',
-    #     "xanchor": 'center',
-    # }, margin=dict(l=0, r=0, t=50, b=0))
-    # fig2.update_layout(legend={
-    #     "title": '<b>Численность</b>',
-    #     "font": {
-    #         "family": 'Arial, sans-serif',
-    #         "size": 14,
-    #         "color": 'black'
-    #     },
-    #     "traceorder": 'normal',
-    #     "y": 1,
-    #     "x": 0.5,
-    #     "orientation": "h",
-    #     "yanchor": 'bottom',
-    #     "xanchor": 'center',
-    # }, margin=dict(l=0, r=0, t=50, b=0))
     budget_cards = [card(data['Бюджет'], data['Бюджет на человек'],
                          'Бюджет на человека', f'Бюджет {df.iloc[i]["Регион"]}', True) for i, data in filtered_df.iterrows()]
     involvement_cards = [card(data['Общее количество вовлеченной молодежи'], data['Уровень вовлеченности населения'],
@@ -166,9 +100,6 @@ def display_info(regions):
         }, margin=dict(l=0, r=0, t=50, b=0))
 
     return budget_cards, involvement_cards, [dcc.Graph("histogram_budget", figure=histogram_budget), dcc.Graph("histogram_amount", figure=histogram_amount)]
-# [card(budget, budget_per_person, 'Бюджет на человека', 'Бюджет', True),
-#             card(youth_involvement, population_involvement, 'Уровень вовлеченности населения', 'Количество вовлеченной молодежи', color=color)], []
-    # [dcc.Graph(id="histogram", figure=fig),dcc.Graph(id="histogram2", figure=fig2)]
 
 
 compare = html.Div(

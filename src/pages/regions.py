@@ -7,8 +7,7 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
 
-df = pd.read_csv('https://raw.githubusercontent.com/dmitrykulakovfrontend/YouthBitDashboard/main/out.csv')
-df_massmedia = pd.read_csv('https://raw.githubusercontent.com/dmitrykulakovfrontend/YouthBitDashboard/main/main.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/dmitrykulakovfrontend/YouthBitDashboard/main/main.csv')
 
 
 @callback(Output("charts", "style"),  Input("region", "value"), Input("type", "value"))
@@ -22,7 +21,7 @@ def toggle_menu(val1, val2):
 def display_region_info(region_name, type):
     if region_name == None or type == None: return '','',{}
     if type == "СМИ":
-      filtered_df = df_massmedia.loc[df['Регион'] == region_name]
+      filtered_df = df.loc[df['Регион'] == region_name]
 
       financings = filtered_df["Финансирование"].iloc[0]
       financings_percentage = filtered_df["Финансирование, тенденция"].iloc[0]
@@ -131,8 +130,6 @@ def display_region_info(region_name, type):
       },margin=dict(l=0, r=0, t=50, b=0),width=500,height=300)
       
       return [financings_card,visitors_card,subscribers_card], [dcc.Graph(id="histogram",figure=fig),dcc.Graph(id="histogram2", figure=fig2),dcc.Graph(id="pie", figure=pie)],{"display": "flex", "gap": "20px", "margin": "1rem 0", "flex-wrap": "wrap", "justify-content": "space-between" }
-      # [dcc.Graph(id="histogram",figure=fig),
-      #         dcc.Graph(id="histogram2", figure=fig2)]
     elif type == "Основное":
 
       filtered_df = df.loc[df['Регион'] == region_name]
